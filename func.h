@@ -3,6 +3,7 @@
 #include <ctime>
 #include <fstream>
 #include <string>
+#include <string>
 
 using std::string;
 
@@ -75,9 +76,9 @@ template<>
 int min_el_inx(const test*, int);
 
 template<typename T>
-bool search_lin_el_iter(const T*, int);
+bool search_lin_el_iter(const T*, int, int);
 template<>
-bool search_lin_el_iter(const test*, int);
+bool search_lin_el_iter(const test*, int, int);
 
 template<typename T>
 bool search_bin_el_rec(const T*, int, int, int);
@@ -85,19 +86,19 @@ template<>
 bool search_bin_el_rec(const test*, int, int, int);
 
 template<typename T>
-int count_el(const T*, bool(*pred)(const T*));
+int count_el(const T*, bool(*pred)(const T&), int);
 template<typename node>
-int count_el(const test*, bool(*pred)(const node*));
+int count_el(const test*, bool(*pred)(const node&), int);
 
 template<typename T>
-int sum_el(const T*, bool(*pred)(const T*));
+int sum_el(const T*, bool(*pred)(const T&), int);
 template<typename T>
-int sum_el(const test*, bool(*pred)(const T*));
+int sum_el(const test*, bool(*pred)(const T&), int);
 
 template<typename T>
-int mul_el(const T*, bool(*pred)(const T*));
+auto mul_el(const T*, bool(*pred)(const T&), int) -> T;
 template<typename T>
-int mul_el(const test*, bool(*pred)(const T*));
+auto mul_el(const test*, bool(*pred)(const T&), int) -> T;
 
 template <typename T>
 void classic_input(T*, int);
@@ -117,60 +118,57 @@ void file_input(test*, int);
 
 template <typename T>
 void file_output(T*, int);
-template <>
-void file_output(test*, int);
 
 template<typename T>
-inline bool pos_el(const T& num)
+bool pos_el(const T& num)
 {
-
 	return num > 0;
 }
 
 template<>
-inline bool pos_el(const test& st_obj)
+bool pos_el(const test& st_obj)
 {
 	return st_obj.n_x > 0;
 }
 
 template<typename T>
-inline bool neg_el(const T& num)
+bool neg_el(const T& num)
 {
 	return num < 0;
 }
 
 template<>
-inline bool neg_el(const test& st)
+bool neg_el(const test& st)
 {
 	return st.n_x < 0;
 }
 
 template<typename T>
-inline bool zero_el(const T& num)
+bool zero_el(const T& num)
 {
 	return num == 0;
 }
 
 template<>
-inline bool zero_el(const test& st)
+bool zero_el(const test& st)
 {
 	return st.n_x == 0;
 }
 
 template<typename T>
-inline bool mult_el(const T& num)
+bool mult_el(const T& num)
 {
 	return num % 3 == 0;
 }
 
 template<>
-inline bool mult_el(const test& st)
+bool mult_el(const test& st)
 {
 	return st.n_x % 3 == 0;
 }
 
 template<typename T>
-inline void create_randow(T* arr, int size)
+void create_randow(T* arr, int size)
 {
 	for (size_t i = 0; i < size; i++)
 		arr[i] = rand() % +101;
@@ -180,45 +178,32 @@ template<>
 void create_randow(test* arr_st, int size)
 {
 	for (size_t i = 0; i < size; i++)
-	{
-		arr_st[i].n_x = rand() % +101;
-		arr_st[i].s_x = 'A' + (rand() % +26);
-	}
+		arr_st[i] = { rand() % +101,string(1,char(65 + rand() % +26)) };
 }
 
 template<typename T>
 void insert_shift(T* arr, int inx, int size)
 {
-	for (size_t i = size - 1; i > inx; i--)
-	{
-		T temp = arr[i];
-		arr[i] = arr[i - 1];
-		arr[i - 1] = temp;
-	}
+	for (size_t i = size_t(size - 1); i > inx; i--)
+		std::swap(arr[i], arr[i - 1]);
+
 	arr[inx] = rand() % +101;
-	std::cout << "add " << arr[inx] << " in index " << inx << std::endl;
 }
 
 template<>
 void insert_shift(test* st_arr, int inx, int size)
 {
-	for (size_t i = size - 1; i > inx; i--)
-	{
-		decltype(st_arr->n_x) temp_int = st_arr[i].n_x;
-		decltype(st_arr->s_x) temp_st = st_arr[i].s_x;
-		st_arr[i].n_x = st_arr[i - 1].n_x;
-		st_arr[i].s_x = st_arr[i - 1].s_x;
-		st_arr[i - 1].n_x = temp_int;
-		st_arr[i].s_x = temp_st;
-	}
-	st_arr[inx].n_x = rand() % +101;
-	st_arr[inx].s_x = 'A' + (rand() % +26);
+	for (size_t i = size_t(size - 1); i > inx; i--)
+		std::swap(st_arr[i], st_arr[i - 1]);
+
+	st_arr[inx] = { rand() % +101,
+			string(1,char(65 + rand() % +26)) };
 }
 
 template<typename T>
 void remove_shift(T* arr, int inx, int size)
 {
-	for (size_t i = inx; i < size - 1; i++)
+	for (size_t i = inx; i < size_t(size - 1); i++)
 		std::swap(arr[i], arr[i + 1]);
 	arr[size - 1] = 0;
 }
@@ -228,27 +213,40 @@ void remove_shift(test* st_arr, int inx, int size)
 {
 	for (int i = inx; i < size - 1; i++)
 		std::swap(st_arr[i], st_arr[i + 1]);
-	st_arr[size - 1].n_x = 0;
-	st_arr[size - 1].s_x = "0";
+	st_arr[size - 1] = { 0,"0" };
 }
 
 template<typename T>
 void sort_bubble(T* arr, int size)
 {
-	for (size_t i = 0; i < size - 1; i++)
-		for (size_t j = 0; j < size - 1; ++j)
+	bool flag = true;
+	int i = 0;
+	while (flag == true)
+	{
+		flag = false;
+		for (int j = 0; i < size - j - 1; j++)
 			if (arr[j] > arr[j + 1])
-				std::swap(arr[j], arr[j + 1]);
+				std::swap(arr[j], arr[j + 1]),
+				flag = true;
+		i++;
+	}
+
 }
 
 template<>
 void sort_bubble(test* st_arr, int size)
 {
-	for (size_t i = 0; i < size - 1; i++)
-		for (size_t j = 0; j < size - 1; ++j)
+	bool flag = true;
+	int i = 0;
+	while (flag == true)
+	{
+		flag = false;
+		for (int j = 0; i < size - j - 1; j++)
 			if (st_arr[j].n_x > st_arr[j + 1].n_x)
-				std::swap(st_arr[j], st_arr[j + 1]);
-
+				std::swap(st_arr[j], st_arr[j + 1]),
+				flag = true;
+		i++;
+	}
 
 }
 
@@ -289,9 +287,7 @@ void sort_quick(T* arr, int size)
 		while (arr[right] > mid) right--;
 		if (left <= right)
 		{
-			temp = arr[left];
-			arr[left] = arr[right];
-			arr[right] = temp;
+			std::swap(arr[left], arr[right]);
 			left++;
 			right--;
 		}
@@ -372,17 +368,17 @@ int min_el_inx(const test* st_arr, int size)
 }
 
 template<typename T>
-inline bool search_lin_el_iter(const T* arr, int num)
+bool search_lin_el_iter(const T* arr, int num, int size)
 {
-	for (int i : arr)
-		if (i == num) return true;
+	for (int i = 0; i < size; i++)
+		if (arr[i] == num) return true;
 	return false;
 }
 
 template<>
-inline bool search_lin_el_iter(const test* st_arr, int num)
+bool search_lin_el_iter(const test* st_arr, int num, int size)
 {
-	for (int i = 0; i < SIZE_ARRAY; i++)
+	for (int i = 0; i < size; i++)
 	{
 		if (num == st_arr[i].n_x) return true;
 	}
@@ -390,7 +386,7 @@ inline bool search_lin_el_iter(const test* st_arr, int num)
 }
 
 template<typename T>
-inline bool search_bin_el_rec(const T* arr, int left, int right, int num)
+bool search_bin_el_rec(const T* arr, int left, int right, int num)
 {
 	if (right >= left)
 	{
@@ -400,7 +396,6 @@ inline bool search_bin_el_rec(const T* arr, int left, int right, int num)
 		if (arr[mid] > num)
 			return search_bin_el_rec(arr, left, mid - 1, num);
 		return search_bin_el_rec(arr, mid + 1, right, num);
-
 	}
 
 	return false;
@@ -424,60 +419,60 @@ bool search_bin_el_rec(const test* st, int left, int right, int num)
 }
 
 template<typename T>
-int count_el(const T* arr, bool(*pred)(const T*))
+int count_el(const T* arr, bool(*pred)(const T&), int size)
 {
 	int sum = 0;
-	for (int i : arr)
-		if (pred(i))
+	for (int i = 0; i < size; i++)
+		if (pred(arr[i]))
 			sum++;
 	return sum;
 }
 
 template<typename node>
-int count_el(const test* st_arr, bool(*pred)(const node*))
+int count_el(const test* st_arr, bool(*pred)(const node&), int size)
 {
 	int sum = 0;
-	for (int i = 0; i < SIZE_ARRAY; i++)
+	for (int i = 0; i < size; i++)
 		if (pred(st_arr[i].n_x))
 			sum++;
 	return sum;
 }
 
 template<typename T>
-auto sum_el(const T* arr, bool(*pred)(const T*)) -> T
+auto sum_el(const T* arr, bool(*pred)(const T&), int size) -> T
 {
 	int sum = 0;
-	for (auto i : arr)
+	for (int i = 0; i < size; i++)
 		if (pred(arr[i]))
 			sum += arr[i];
 	return sum;
 }
 
 template<typename T>
-auto sum_el(const test* st_arr, bool(*pred)(const T*)) -> decltype(st_arr->n_x)
+auto sum_el(const test* st_arr, bool(*pred)(const T&), int size) -> decltype(st_arr->n_x)
 {
 	decltype(st_arr->n_x) sum = 0;
-	for (int i = 0; i < SIZE_ARRAY; i++)
+	for (int i = 0; i < size; i++)
 		if (pred(st_arr[i].n_x))
 			sum += st_arr[i].n_x;
 	return sum;
 }
 
 template<typename T>
-auto mul_el(const T* arr, bool(*pred)(const T*)) -> T
+auto mul_el(const T* arr, bool(*pred)(const T&), int size) -> T
 {
 	T mul = 1;
-	for (auto i : arr)
+	for (int i = 0; i < size; i++)
 		if (pred(arr[i]))
 			mul *= arr[i];
 	return mul;
 }
 
 template<typename T>
-auto mul_el(const test* st_arr, bool(*pred)(const T*)) -> decltype(st_arr->n_x)
+auto mul_el(const test* st_arr, bool(*pred)(const T&), int size) -> decltype(st_arr->n_x)
 {
 	decltype(st_arr->n_x) mul = 1;
-	for (int i = 0; i < SIZE_ARRAY; i++)
+	for (int i = 0; i < size; i++)
 		if (pred(st_arr[i].n_x))
 			mul += st_arr[i].n_x;
 	return mul;
@@ -486,7 +481,7 @@ auto mul_el(const test* st_arr, bool(*pred)(const T*)) -> decltype(st_arr->n_x)
 template<typename T>
 void classic_input(T* arr, int size)
 {
-	for (auto i : arr)
+	for (int i = 0; i < size; i++)
 		std::cin >> i;
 }
 
@@ -497,13 +492,13 @@ void classic_input(test* st_arr, int size)
 	{
 		std::cout << "number: ";
 		std::cin >> st_arr[i].n_x;
-		std::cout << "text: ";
+		std::cout << "\rtext: ";
 		std::getline(std::cin, st_arr[i].s_x);
 	}
 }
 
 template<typename T>
-inline void classic_output(const T* arr, int size)
+void classic_output(const T* arr, int size)
 {
 	for (int i = 0; i < size; i++)
 		std::cout << arr[i] << " ";
@@ -511,11 +506,11 @@ inline void classic_output(const T* arr, int size)
 }
 
 template<>
-inline void classic_output(const test* st_arr, int size)
+void classic_output(const test* st_arr, int size)
 {
 	for (int i = 0; i < size; i++)
 		std::cout << st_arr[i].n_x << " "
-		<< st_arr[i].s_x << " " << std::endl;
+		<< st_arr[i].s_x << std::endl;
 }
 
 template<typename T>
