@@ -30,9 +30,9 @@ template<>
 bool zero_el(const test&);
 
 template<typename T>
-bool mult_el(const T&);
+bool mult_el(const T&, int);
 template<>
-bool mult_el(const test&);
+bool mult_el(const test&, int);
 
 template<typename T>
 void create_randow(T*, int);
@@ -85,6 +85,10 @@ template<>
 bool search_bin_el_rec(const test*, int, int, int);
 
 template<typename T>
+int count_el(const T*, int);
+template<typename node>
+int count_el(const test*, int);
+template<typename T>
 int count_el(const T*, bool(*pred)(const T&), int);
 template<typename node>
 int count_el(const test*, bool(*pred)(const node&), int);
@@ -93,6 +97,11 @@ template<typename T>
 int sum_el(const T*, bool(*pred)(const T&), int);
 template<typename T>
 int sum_el(const test*, bool(*pred)(const T&), int);
+
+template<typename T>
+auto mul_el(const T*, int) -> double;
+template<typename T>
+auto mul_el(const test*, int) -> double;
 
 template<typename T>
 auto mul_el(const T*, bool(*pred)(const T&), int) -> T;
@@ -109,7 +118,6 @@ void classic_output(const T*, int);
 template <>
 void classic_output(const test*, int);
 
-
 template <typename T>
 void file_input(T*, int);
 template <>
@@ -117,6 +125,11 @@ void file_input(test*, int);
 
 template <typename T>
 void file_output(T*, int);
+
+template<typename T>
+void compress(T*, int, int);
+template<>
+void compress(test*, int, int);
 
 template<typename T>
 bool pos_el(const T& num)
@@ -155,22 +168,22 @@ bool zero_el(const test& st)
 }
 
 template<typename T>
-bool mult_el(const T& num)
+bool mult_el(const T& num, int k)
 {
-	return num % 3 == 0;
+	return num % k == 0;
 }
 
 template<>
-bool mult_el(const test& st)
+bool mult_el(const test& st, int k)
 {
-	return st.n_x % 3 == 0;
+	return st.n_x % k == 0;
 }
 
 template<typename T>
 void create_randow(T* arr, int size)
 {
 	for (size_t i = 0; i < size; i++)
-		arr[i] = rand() % +101;
+		arr[i] = (double)(rand()) / RAND_MAX * (150 + (-50)) - 40;
 }
 
 template<>
@@ -418,6 +431,28 @@ bool search_bin_el_rec(const test* st, int left, int right, int num)
 }
 
 template<typename T>
+int count_el(const T* arr, int size)
+{
+	int sum(0);
+	for (int i = 0; i < size; i++)
+		if (neg_el(arr[i]))
+			if (zero_el(arr[i]))
+				sum++;
+	return sum;
+}
+
+template<typename node>
+int count_el(const test* st_arr, int size)
+{
+	int sum(0);
+	for (int i = 0; i < size; i++)
+		if (neg_el(st_arr[i].n_x))
+			if (zero_el(st_arr[i].n_x))
+				sum++;
+	return sum;
+}
+
+template<typename T>
 int count_el(const T* arr, bool(*pred)(const T&), int size)
 {
 	int sum = 0;
@@ -455,6 +490,40 @@ auto sum_el(const test* st_arr, bool(*pred)(const T&), int size) -> decltype(st_
 		if (pred(st_arr[i].n_x))
 			sum += st_arr[i].n_x;
 	return sum;
+}
+
+template<typename T>
+auto mul_el(const T* arr, int size) -> double
+{
+	auto mul = 1.0; int inx = size;
+
+	for (int i = size - 1; i > 0; i--)
+		if (neg_el(arr[i]))
+		{
+			inx = i;
+			break;
+		}
+	for (int i = 0; i < inx; i++)
+		mul *= arr[i];
+
+	return double(mul);
+}
+
+template<typename T>
+auto mul_el(const test* st_arr, int size) -> double
+{
+	auto mul = 1.0; int inx = size;
+
+	for (int i = size - 1; i > 0; i--)
+		if (neg_el(st_arr[i].n_x))
+		{
+			inx = i;
+			break;
+		}
+	for (int i = 0; i < inx; i++)
+		mul *= st_arr[i].n_x;
+
+	return mul;
 }
 
 template<typename T>
@@ -561,5 +630,21 @@ void file_output(T* arr, int size)
 	}
 	file.close();
 
+}
+
+template<typename T>
+void compress(T* arr, int k, int size)
+{
+	for (int i = 0; i < size; i++)
+		if (mult_el(arr[i], k))
+			remove_shift(arr, i, size);
+}
+
+template<>
+void compress(test* st_arr, int k, int size)
+{
+	for (int i = 0; i < size; i++)
+		if (mult_el(st_arr[i].n_x, k))
+			remove_shift(st_arr, i, size);
 }
 

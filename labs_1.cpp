@@ -8,7 +8,7 @@ int main()
 	int array[SIZE_ARRAY]{ 0 };
 	test testing[SIZE_ARRAY];
 	create_randow(array, SIZE_ARRAY);
-	create_randow(testing, SIZE_ARRAY);
+	//create_randow(testing, SIZE_ARRAY);
 	classic_output(array, SIZE_ARRAY);
 	//classic_output(testing, SIZE_ARRAY);
 	/*sort_bubble(array, SIZE_ARRAY);
@@ -24,7 +24,7 @@ int main()
 		//std::cout << std::endl;
 		//for (const auto& i : testing)
 		//	std::cout << i.n_x << " ";
-	std::cout << mul_el(array, pos_el, SIZE_ARRAY);
+	std::cout << mul_el(array, SIZE_ARRAY);
 
 	system("pause>nul");
 	return 0;
