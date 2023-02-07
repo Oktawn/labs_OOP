@@ -132,52 +132,28 @@ template<>
 void compress(test*, int, int);
 
 template<typename T>
-bool pos_el(const T& num)
-{
-	return num > 0;
-}
+bool pos_el(const T& num) { return num > 0; }
 
 template<>
-bool pos_el(const test& st_obj)
-{
-	return st_obj.n_x > 0;
-}
+bool pos_el(const test& st_obj) { return st_obj.n_x > 0; }
 
 template<typename T>
-bool neg_el(const T& num)
-{
-	return num < 0;
-}
+bool neg_el(const T& num) { return num < 0; }
 
 template<>
-bool neg_el(const test& st)
-{
-	return st.n_x < 0;
-}
+bool neg_el(const test& st) { return st.n_x < 0; }
 
 template<typename T>
-bool zero_el(const T& num)
-{
-	return num == 0;
-}
+bool zero_el(const T& num) { return num == 0; }
 
 template<>
-bool zero_el(const test& st)
-{
-	return st.n_x == 0;
-}
+bool zero_el(const test& st) { return st.n_x == 0; }
 
 template<typename T>
-bool mult_el(const T& num, int k)
-{
-	return num % k == 0;
-}
+bool mult_el(const T& num, int k) { return num % k == 0; }
 
 template<>
-bool mult_el(const test& st, int k)
-{
-	return st.n_x % k == 0;
-}
+bool mult_el(const test& st, int k) { return st.n_x % k == 0; }
 
 template<typename T>
 void create_randow(T* arr, int size)
@@ -190,7 +166,8 @@ template<>
 void create_randow(test* arr_st, int size)
 {
 	for (size_t i = 0; i < size; i++)
-		arr_st[i] = { rand() % +101,string(1,char(65 + rand() % +26)) };
+		arr_st[i] = { rand() % +101,
+		string(1,char(65 + rand() % +26)) };
 }
 
 template<typename T>
@@ -338,7 +315,6 @@ int max_el_inx(const T* arr, int size)
 	for (int i = 0; i < size; i++)
 		if (max < arr[i])
 			max = arr[i], inx = i;
-
 	return inx;
 }
 
@@ -424,9 +400,7 @@ bool search_bin_el_rec(const test* st, int left, int right, int num)
 		if (st[mid].n_x > num)
 			return search_bin_el_rec(st, left, mid - 1, num);
 		return search_bin_el_rec(st, mid + 1, right, num);
-
 	}
-
 	return false;
 }
 
