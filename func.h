@@ -24,7 +24,7 @@ template<typename T>
 bool zero_el(const T&);
 
 template<typename T>
-bool mult_el(const T&, int);
+bool mult_el(const T&, const T&);
 
 template<typename T>
 bool less_more(const T&, const T&);
@@ -57,13 +57,13 @@ void sort_bubble(test*, int, bool(*pred)(const T&, const T&));
 
 template<typename T>
 void sort_select(T*, int, bool(*pred)(const T&, const T&));
-template< >
+template<typename T>
 void sort_select(test*, int, bool(*pred)(const T&, const T&));
 
 template<typename T>
-void sort_quick(T*, int, bool(*pred));
+void sort_quick(T*, int);
 template<>
-void sort_quick(test*, int, bool(*pred));
+void sort_quick(test*, int);
 
 template<typename T>
 int max_el_inx(const T*, int);
@@ -86,13 +86,11 @@ template<>
 bool search_bin_el_rec(const test*, int, int, int);
 
 template<typename T>
-int count_el(const T*, int);
-template<typename node>
-int count_el(const test*, int);
+int count_el(const T*, int, bool(*pred)(const T&, const T&));
 template<typename T>
-int count_el(const T*, bool(*pred)(const T&), int);
-template<typename node>
-int count_el(const test*, bool(*pred)(const node&), int);
+int count_el(const T*, int, bool(*pred)(const T&, const T&), const T&);
+template<typename T>
+int count_el(const test*, int, bool(*pred)(const T&, const T&), const T&);
 
 template<typename T>
 int sum_el(const T*, bool(*pred)(const T&), int);
@@ -142,7 +140,7 @@ template<typename T>
 bool zero_el(const T& num) { return num == 0; }
 
 template<typename T>
-bool mult_el(const T& num, int k) { return num % k == 0; }
+bool mult_el(const T& num, const T& k) { return num % k == 0; }
 
 template<typename T>
 bool less_more(const T& a, const T& b) { return a > b; }
@@ -157,7 +155,7 @@ template<typename T>
 void create_randow(T* arr, int size)
 {
 	for (size_t i = 0; i < size; i++)
-		arr[i] = (double)(rand()) / RAND_MAX * (150 + (-50)) - 40;
+		arr[i] = (double)(rand()) / RAND_MAX * (100 - (-150)) + (-150);
 }
 
 template<>
@@ -268,11 +266,11 @@ template<typename T>
 void sort_quick(T* arr, int size)
 {
 	int left = 0; int right = size - 1; int mid = arr[size / 2];
-	int temp;
+	int temp(0);
 	do
 	{
-		while (arr[left] < mid) left++;
-		while (arr[right] > mid) right--;
+		while (arr[left] > mid) left++;
+		while (arr[right] < mid) right--;
 		if (left <= right)
 		{
 			std::swap(arr[left], arr[right]);
@@ -404,43 +402,31 @@ bool search_bin_el_rec(const test* st, int left, int right, int num)
 }
 
 template<typename T>
-int count_el(const T* arr, int size)
+int count_el(const T* arr, int size, bool(*pred)(const T&, const T&))
 {
 	int sum(0);
 	for (int i = 0; i < size; i++)
-		if (neg_el(arr[i]))
-			if (zero_el(arr[i]))
-				sum++;
-	return sum;
-}
-
-template<typename node>
-int count_el(const test* st_arr, int size)
-{
-	int sum(0);
-	for (int i = 0; i < size; i++)
-		if (neg_el(st_arr[i].n_x))
-			if (zero_el(st_arr[i].n_x))
-				sum++;
-	return sum;
-}
-
-template<typename T>
-int count_el(const T* arr, bool(*pred)(const T&), int size)
-{
-	int sum = 0;
-	for (int i = 0; i < size; i++)
-		if (pred(arr[i]))
+		if (pred(arr[i], arr[i + 1]))
 			sum++;
 	return sum;
 }
 
-template<typename node>
-int count_el(const test* st_arr, bool(*pred)(const node&), int size)
+template<typename T>
+int count_el(const T* arr, int size, bool(*pred)(const T&, const T&), const T& k)
 {
 	int sum = 0;
 	for (int i = 0; i < size; i++)
-		if (pred(st_arr[i].n_x))
+		if (pred(arr[i], k))
+			sum++;
+	return sum;
+}
+
+template<typename T>
+int count_el(const test* st_arr, int size, bool(*pred)(const T&, const T&), const T& k)
+{
+	int sum = 0;
+	for (int i = 0; i < size; i++)
+		if (pred(st_arr[i].n_x, k))
 			sum++;
 	return sum;
 }
