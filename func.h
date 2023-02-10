@@ -16,23 +16,24 @@ struct test
 
 template<typename T>
 bool pos_el(const T&);
-template<>
-bool pos_el(const test&);
 
 template<typename T>
 bool neg_el(const T&);
-template<>
-bool neg_el(const test&);
 
 template<typename T>
 bool zero_el(const T&);
-template<>
-bool zero_el(const test&);
 
 template<typename T>
 bool mult_el(const T&, int);
-template<>
-bool mult_el(const test&, int);
+
+template<typename T>
+bool less_more(const T&, const T&);
+
+template<typename T>
+bool more_less(const T&, const T&);
+
+template<typename T>
+bool zero_after_neg(const T&, const T&);
 
 template<typename T>
 void create_randow(T*, int);
@@ -50,19 +51,19 @@ template<>
 void remove_shift(test*, int, int);
 
 template<typename T>
-void sort_bubble(T*, int);
-template<>
-void sort_bubble(test*, int);
+void sort_bubble(T*, int, bool(*pred)(const T&, const T&));
+template<typename T>
+void sort_bubble(test*, int, bool(*pred)(const T&, const T&));
 
 template<typename T>
-void sort_select(T*, int);
+void sort_select(T*, int, bool(*pred)(const T&, const T&));
 template< >
-void sort_select(test*, int);
+void sort_select(test*, int, bool(*pred)(const T&, const T&));
 
 template<typename T>
-void sort_quick(T*, int);
+void sort_quick(T*, int, bool(*pred));
 template<>
-void sort_quick(test*, int);
+void sort_quick(test*, int, bool(*pred));
 
 template<typename T>
 int max_el_inx(const T*, int);
@@ -134,26 +135,23 @@ void compress(test*, int, int);
 template<typename T>
 bool pos_el(const T& num) { return num > 0; }
 
-template<>
-bool pos_el(const test& st_obj) { return st_obj.n_x > 0; }
-
 template<typename T>
 bool neg_el(const T& num) { return num < 0; }
-
-template<>
-bool neg_el(const test& st) { return st.n_x < 0; }
 
 template<typename T>
 bool zero_el(const T& num) { return num == 0; }
 
-template<>
-bool zero_el(const test& st) { return st.n_x == 0; }
-
 template<typename T>
 bool mult_el(const T& num, int k) { return num % k == 0; }
 
-template<>
-bool mult_el(const test& st, int k) { return st.n_x % k == 0; }
+template<typename T>
+bool less_more(const T& a, const T& b) { return a > b; }
+
+template<typename T>
+bool more_less(const T& a, const T& b) { return a < b; }
+
+template<typename T>
+bool zero_after_neg(const T& a, const T& b) { return neg_el(a) && zero_el(b); }
 
 template<typename T>
 void create_randow(T* arr, int size)
@@ -206,15 +204,16 @@ void remove_shift(test* st_arr, int inx, int size)
 }
 
 template<typename T>
-void sort_bubble(T* arr, int size)
+void sort_bubble(T* arr, int size, bool(*pred)(const T&, const T&))
 {
 	bool flag = true;
 	int i = 0;
+
 	while (flag == true)
 	{
 		flag = false;
 		for (int j = 0; i < size - j - 1; j++)
-			if (arr[j] > arr[j + 1])
+			if (pred(arr[j], arr[j + 1]))
 				std::swap(arr[j], arr[j + 1]),
 				flag = true;
 		i++;
@@ -222,8 +221,8 @@ void sort_bubble(T* arr, int size)
 
 }
 
-template<>
-void sort_bubble(test* st_arr, int size)
+template<typename T>
+void sort_bubble(test* st_arr, int size, bool(*pred)(const T&, const T&))
 {
 	bool flag = true;
 	int i = 0;
@@ -231,7 +230,7 @@ void sort_bubble(test* st_arr, int size)
 	{
 		flag = false;
 		for (int j = 0; i < size - j - 1; j++)
-			if (st_arr[j].n_x > st_arr[j + 1].n_x)
+			if (pred(st_arr[j].n_x, st_arr[j + 1].n_x))
 				std::swap(st_arr[j], st_arr[j + 1]),
 				flag = true;
 		i++;
@@ -240,27 +239,27 @@ void sort_bubble(test* st_arr, int size)
 }
 
 template<typename T>
-void sort_select(T* arr, int size)
+void sort_select(T* arr, int size, bool(*pred)(const T&, const T&))
 {
 	int min;
 	for (int i = 0; i < size; i++)
 	{
 		min = i;
 		for (int j = i + 1; j < size; j++)
-			min = (arr[j] < arr[min]) ? j : min;
+			min = (pred(arr[j], arr[min])) ? j : min;
 		std::swap(arr[i], arr[min]);
 	}
 }
 
-template<>
-void sort_select(test* st_arr, int size)
+template<typename T>
+void sort_select(test* st_arr, int size, bool(*pred)(const T&, const T&))
 {
 	int min;
 	for (int i = 0; i < size; i++)
 	{
 		min = i;
 		for (int j = i + 1; j < size; j++)
-			min = (st_arr[j].n_x < st_arr[min].n_x) ? j : min;
+			min = (pred(st_arr[j].n_x, st_arr[min].n_x)) ? j : min;
 		std::swap(st_arr[i], st_arr[min]);
 	}
 }
