@@ -125,8 +125,6 @@ void file_output(T*, int);
 
 template<typename T>
 void compress(T*, int, int);
-template<>
-void compress(test*, int, int);
 
 template<typename T>
 bool pos_el(const T& num) { return num > 0; }
