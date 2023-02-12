@@ -88,9 +88,9 @@ bool search_bin_el_rec(const test*, int, int, int);
 template<typename T>
 int count_el(const T*, int, bool(*pred)(const T&, const T&));
 template<typename T>
-int count_el(const T*, int, bool(*pred)(const T&, const T&), const T&);
+int count_el(const T*, int, bool(*pred)(const T&));
 template<typename T>
-int count_el(const test*, int, bool(*pred)(const T&, const T&), const T&);
+int count_el(const test*, int, bool(*pred)(const T&));
 
 template<typename T>
 int sum_el(const T*, bool(*pred)(const T&), int);
@@ -98,14 +98,12 @@ template<typename T>
 int sum_el(const test*, bool(*pred)(const T&), int);
 
 template<typename T>
-auto mul_el(const T*, int) -> double;
-template<typename T>
-auto mul_el(const test*, int) -> double;
+double mul_el(const T*, int);
 
 template<typename T>
-auto mul_el(const T*, bool(*pred)(const T&), int) -> T;
+double mul_el(const T*, bool(*pred)(const T&), int);
 template<typename T>
-auto mul_el(const test*, bool(*pred)(const T&), int) -> T;
+double mul_el(const test*, bool(*pred)(const T&), int);
 
 template <typename T>
 void classic_input(T*, int);
@@ -412,39 +410,19 @@ int count_el(const T* arr, int size, bool(*pred)(const T&, const T&))
 }
 
 template<typename T>
-int count_el(const T* arr, int size, bool(*pred)(const T&, const T&), const T& k)
+int count_el(const T* arr, int size, bool(*pred)(const T&))
 {
-	int sum = 0;
-	for (int i = 0; i < size; i++)
-		if (pred(arr[i], k))
-			sum++;
-	return sum;
-}
-
-template<typename T>
-int count_el(const test* st_arr, int size, bool(*pred)(const T&, const T&), const T& k)
-{
-	int sum = 0;
-	for (int i = 0; i < size; i++)
-		if (pred(st_arr[i].n_x, k))
-			sum++;
-	return sum;
-}
-
-template<typename T>
-auto sum_el(const T* arr, bool(*pred)(const T&), int size) -> T
-{
-	int sum = 0;
+	int sum(0);
 	for (int i = 0; i < size; i++)
 		if (pred(arr[i]))
-			sum += arr[i];
+			sum++;
 	return sum;
 }
 
 template<typename T>
-auto sum_el(const test* st_arr, bool(*pred)(const T&), int size) -> decltype(st_arr->n_x)
+int count_el(const test* st_arr, int size, bool(*pred)(const T&))
 {
-	decltype(st_arr->n_x) sum = 0;
+	int sum(0);
 	for (int i = 0; i < size; i++)
 		if (pred(st_arr[i].n_x))
 			sum += st_arr[i].n_x;
@@ -452,7 +430,27 @@ auto sum_el(const test* st_arr, bool(*pred)(const T&), int size) -> decltype(st_
 }
 
 template<typename T>
-auto mul_el(const T* arr, int size) -> double
+double sum_el(const T* arr, bool(*pred)(const T&), int size)
+{
+	double sum = 0;
+	for (int i = 0; i < size; i++)
+		if (pred(arr[i]))
+			sum += arr[i];
+	return sum;
+}
+
+template<typename T>
+double sum_el(const test* st_arr, bool(*pred)(const T&), int size)
+{
+	double sum = 0;
+	for (int i = 0; i < size; i++)
+		if (pred(st_arr[i].n_x))
+			sum += st_arr[i].n_x;
+	return sum;
+}
+
+template<typename T>
+double mul_el(const T* arr, int size)
 {
 	auto mul = 1.0; int inx = size;
 
@@ -469,24 +467,7 @@ auto mul_el(const T* arr, int size) -> double
 }
 
 template<typename T>
-auto mul_el(const test* st_arr, int size) -> double
-{
-	auto mul = 1.0; int inx = size;
-
-	for (int i = size - 1; i > 0; i--)
-		if (neg_el(st_arr[i].n_x))
-		{
-			inx = i;
-			break;
-		}
-	for (int i = 0; i < inx; i++)
-		mul *= st_arr[i].n_x;
-
-	return mul;
-}
-
-template<typename T>
-auto mul_el(const T* arr, bool(*pred)(const T&), int size) -> T
+double mul_el(const T* arr, bool(*pred)(const T&), int size)
 {
 	T mul = 1;
 	for (int i = 0; i < size; i++)
@@ -496,7 +477,7 @@ auto mul_el(const T* arr, bool(*pred)(const T&), int size) -> T
 }
 
 template<typename T>
-auto mul_el(const test* st_arr, bool(*pred)(const T&), int size) -> decltype(st_arr->n_x)
+double mul_el(const test* st_arr, bool(*pred)(const T&), int size)
 {
 	decltype(st_arr->n_x) mul = 1;
 	for (int i = 0; i < size; i++)
@@ -599,11 +580,4 @@ void compress(T* arr, int k, int size)
 			remove_shift(arr, i, size);
 }
 
-template<>
-void compress(test* st_arr, int k, int size)
-{
-	for (int i = 0; i < size; i++)
-		if (mult_el(st_arr[i].n_x, k))
-			remove_shift(st_arr, i, size);
-}
 

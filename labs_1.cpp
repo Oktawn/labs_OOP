@@ -12,7 +12,7 @@ int main()
 	classic_output(array, SIZE_ARRAY);
 	//classic_output(testing, SIZE_ARRAY);
 	std::cout << std::endl;
-	std::cout << count_el(array, SIZE_ARRAY, neg_el);
+	std::cout << count_el(array, SIZE_ARRAY, pos_el);
 	//classic_output(array, SIZE_ARRAY);
 	//classic_output(testing, SIZE_ARRAY);
 
