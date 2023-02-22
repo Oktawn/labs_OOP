@@ -3,13 +3,8 @@
 int CCall::number_key_call = 0;
 
 CCall::CCall()
-{
-	start_number = steady_clock::now();
-	priority = false;
-	abonent = "anonim";
-	numbers = "79XXXXXXXXX";
-	thems = "programming";
-}
+	: start_number(steady_clock::now()), priority(false),
+	  abonent("anonim"), numbers("79XXXXXXXXX"), thems("programming") {}
 
 CCall::CCall(bool priority,
 			 std::string abonent,
