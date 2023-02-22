@@ -1,7 +1,6 @@
 #include "CCall.h"
 
-int CCall::number_key_call=0;
-
+int CCall::number_key_call = 0;
 
 CCall::CCall()
 {
@@ -13,9 +12,9 @@ CCall::CCall()
 }
 
 CCall::CCall(bool priority,
-	std::string abonent,
-	std::string numbers,
-	std::string thems)
+			 std::string abonent,
+			 std::string numbers,
+			 std::string thems)
 {
 	start_number = steady_clock::now();
 	this->priority = (correct_priority(priority)) ? priority : this->priority;
@@ -55,7 +54,7 @@ bool CCall::correct_number(std::string ch)
 {
 	for (size_t i = 0; i < ch.size(); i++)
 	{
-		if (isdigit(ch[i]) && ch.size() <= numbers.size())
+		if (isdigit(ch[i]) && ch.size() == numbers.size())
 			continue;
 		else
 		{
@@ -67,7 +66,7 @@ bool CCall::correct_number(std::string ch)
 	return true;
 }
 
-bool CCall::correct_priority(const bool& ch)
+bool CCall::correct_priority(const bool &ch)
 {
 	if (ch == 0 || ch == 1)
 		return true;
@@ -118,7 +117,7 @@ void CCall::change_abonent(std::string ch)
 	abonent = (correct_names(ch)) ? ch : abonent;
 }
 
-void CCall::change_priority(const bool& ch)
+void CCall::change_priority(const bool &ch)
 {
 	bool temp = priority;
 	priority = (correct_priority(ch)) ? ch : priority;
@@ -140,15 +139,12 @@ float CCall::time_call()
 	return elapsed.count();
 }
 
-
-const bool operator>(CCall& left, CCall& right)
+const bool operator>(CCall &left, CCall &right)
 {
 	return left.time_call() > right.time_call();
 }
 
-
-const bool operator==(CCall& left, CCall& right)
+const bool operator==(CCall &left, CCall &right)
 {
 	return left.time_call() == right.time_call();
 }
-
