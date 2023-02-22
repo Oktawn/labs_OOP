@@ -18,7 +18,7 @@ int main()
 	test.show_thems();
 	test.show_priority();
 
-	test.change_number("79199566302");
+	test.change_number("7919956630");
 	test.show_number();
 
 	std::cout << test.time_call() << std::endl;
