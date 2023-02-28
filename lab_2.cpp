@@ -4,24 +4,25 @@ int main()
 {
 	CCall test;
 	CCall temp[4];
-	test.show_call();
-	test.change_abonent("k pop");
+	test.show_call();	
 	std::cout << std::endl;
+	test.change_abonent("k pop");
 	test.show_abonent();
-	temp[2].change_priority(4);
-	std::cout << "temp[2] prior: ";
-	temp[2].show_priority();
-	test.change_priority(false);
+	//test.change_priority(false);
 	test.show_priority();
 
 	test.change_thems("nock", true);
 	test.show_thems();
 	test.show_priority();
 
-	test.change_number("7919956630");
+	test.change_number("7919956632");
 	test.show_number();
-
 	std::cout << test.time_call() << std::endl;
+
+	temp[3] = temp[1];
+	temp[2].show_call();
+
+	CCall bb(temp[1]);
 
 	std::cout << CCall::show_key();
 

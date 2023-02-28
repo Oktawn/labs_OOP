@@ -4,21 +4,23 @@ int CCall::number_key_call = 0;
 
 CCall::CCall()
 	: start_number(steady_clock::now()), priority(false),
-	  abonent("anonim"), numbers("79XXXXXXXXX"), thems("programming") {}
+	abonent("anonim"), numbers("79XXXXXXXXX"), thems("programming") {}
 
-CCall::CCall(bool priority,
-			 std::string abonent,
-			 std::string numbers,
-			 std::string thems)
+CCall::CCall(bool priority, std::string abonent, std::string numbers, std::string thems)
 {
 	start_number = steady_clock::now();
 	this->priority = (correct_priority(priority)) ? priority : this->priority;
 	this->abonent = (correct_names(abonent)) ? abonent : this->abonent;
-	this->numbers = (correct_number(numbers)) ? numbers : this->numbers;
+	this->numbers = (correct_number(numbers)) ? numbers : "79XXXXXXXXX";
 	this->thems = (correct_names(thems)) ? thems : this->thems;
 	if (priority)
 		number_key_call++;
 }
+
+CCall::CCall(const CCall& C)
+	:start_number(C.start_number), priority(C.priority),
+	abonent(C.abonent), numbers(C.numbers), thems(C.thems) {}
+
 
 void CCall::show_number() const
 {
@@ -57,13 +59,12 @@ bool CCall::correct_number(std::string ch)
 			return false;
 		}
 	}
-
 	return true;
 }
 
-bool CCall::correct_priority(const bool &ch)
+bool CCall::correct_priority(const char& ch)
 {
-	if (ch == 0 || ch == 1)
+	if (isdigit(ch + '0'))
 		return true;
 	else
 	{
@@ -86,33 +87,33 @@ void CCall::show_call()
 {
 	show_priority(),
 		show_abonent(),
+		show_number(),
 		show_thems();
 	std::cout << "time: " << time_call() << "s\n";
 }
 
-void CCall::change_thems(std::string ch)
+void CCall::change_thems(const std::string& ch)
 {
 	thems = (correct_names(ch)) ? ch : thems;
 }
-void CCall::change_thems(std::string ch, bool prior)
+void CCall::change_thems(const std::string& ch, const int& prior)
 {
 	if (correct_names(ch))
-		thems = ch,
-		number_key_call++;
-	priority = (correct_priority(prior)) ? prior : priority;
+		thems = ch;
+	priority = (correct_priority(prior)) ? number_key_call++, prior : priority;
 }
 
-void CCall::change_number(std::string ch)
+void CCall::change_number(const std::string& ch)
 {
 	numbers = (correct_number(ch)) ? ch : numbers;
 }
 
-void CCall::change_abonent(std::string ch)
+void CCall::change_abonent(const std::string& ch)
 {
 	abonent = (correct_names(ch)) ? ch : abonent;
 }
 
-void CCall::change_priority(const bool &ch)
+void CCall::change_priority(const char& ch)
 {
 	bool temp = priority;
 	priority = (correct_priority(ch)) ? ch : priority;
@@ -134,12 +135,12 @@ float CCall::time_call()
 	return elapsed.count();
 }
 
-const bool operator>(CCall &left, CCall &right)
+const bool operator>(CCall& left, CCall& right)
 {
 	return left.time_call() > right.time_call();
 }
 
-const bool operator==(CCall &left, CCall &right)
+const bool operator==(CCall& left, CCall& right)
 {
 	return left.time_call() == right.time_call();
 }
