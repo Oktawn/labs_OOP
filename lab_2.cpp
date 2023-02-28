@@ -22,7 +22,10 @@ int main()
 	temp[3] = temp[1];
 	temp[2].show_call();
 
-	CCall bb(temp[1]);
+	CCall bb(test);
+
+	std::cout << std::endl;
+	bb.show_call();
 
 	std::cout << CCall::show_key();
 
