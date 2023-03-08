@@ -25,6 +25,8 @@ private:
     Node<T> *Find_Node(const T &_key);
     Node<T> *Find_Node_pos(const int &pos);
 
+    void Copy(const List<T> &obj);
+
     int count;
 
     bool Is_Empty() { return head == tail; }
@@ -36,6 +38,7 @@ public:
         head = tail = nullptr;
         count = 0;
     }
+    List(const List &obj) { Copy(obj); }
     List(const T &knot) { Add_Head(knot); }
     ~List() { Clear(); }
 
@@ -49,12 +52,12 @@ public:
 
     void Show_on_Head() const;
     void Show_on_Tail() const;
-    void Show_Node() const;
+    void Show_Node(const int &pos) const;
 
     void Clear();
 
-    List &operator=(const List &obj);
-    List &operator+(const List &obj);
+    List<T> &operator=(const List<T> &obj);
+    List<T> &operator+(const List<T> &obj);
 };
 
 template <typename T>
@@ -78,6 +81,18 @@ Node<T> *List<T>::Find_Node_pos(const int &pos)
     for (int i = 0; i < inx; i++)
         curr = curr->next;
     return curr;
+}
+
+template <typename T>
+void List<T>::Copy(const List<T> &obj)
+{
+    Clear();
+    Node<T> *temp = obj.head;
+    while (temp)
+    {
+        Add_Tail(temp->key);
+        temp = temp->next;
+    }
 }
 
 template <typename T>
@@ -150,6 +165,12 @@ void List<T>::Remove_Head()
 template <typename T>
 void List<T>::Remove_Tail()
 {
+    if (Is_Empty())
+        return;
+    Node<T> *temp = tail;
+    tail = tail->prev;
+    delete temp;
+    count--;
 }
 
 template <typename T>
@@ -167,4 +188,61 @@ void List<T>::Remove_Node(const T &knot, const int pos)
         Remove_Tail();
         return;
     }
+}
+
+template <typename T>
+void List<T>::Show_on_Head() const
+{
+    curr = head;
+    while (curr)
+    {
+        std::cout << curr->key << " ";
+        curr = curr->next;
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+void List<T>::Show_on_Tail() const
+{
+    curr = tail;
+    while (curr)
+    {
+        std::cout << curr->key << " ";
+        curr = curr->next;
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+void List<T>::Show_Node(const int &pos) const
+{
+    std::cout << Find_Node_pos(pos)->key << std::endl;
+}
+
+template <typename T>
+void List<T>::Clear()
+{
+    while (!Is_Empty())
+        Remove_Head();
+}
+
+template <typename T>
+List<T> &List<T>::operator=(const List<T> &obj)
+{
+    Copy(obj);
+
+    return *this;
+}
+
+template <typename T>
+List<T> &List<T>::operator+(const List<T> &obj)
+{
+    Node<T> *temp = obj;
+    while (temp)
+    {
+        Add_Tail(temp);
+        temp = temp->next;
+    }
+    return *this;
 }
