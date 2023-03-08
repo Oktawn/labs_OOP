@@ -27,7 +27,7 @@ private:
 
     int count;
 
-    bool Is_Empty() { return head == nullptr; }
+    bool Is_Empty() { return head == tail; }
     bool correct_pos(short pos) { return pos >= 0 && pos <= count; }
 
 public:
@@ -117,7 +117,7 @@ void List<T>::Add_Node(const T &knot, const int &pos)
 {
     if (!correct_pos(pos))
         return;
-    if (pos = count)
+    if (pos == count)
     {
         Add_Tail(knot);
         return;
@@ -162,7 +162,7 @@ void List<T>::Remove_Node(const T &knot, const int pos)
         Remove_Head();
         return;
     }
-    if (pos = count - 1)
+    if (pos == count - 1)
     {
         Remove_Tail();
         return;
