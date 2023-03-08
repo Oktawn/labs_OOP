@@ -23,12 +23,12 @@ private:
     Node<T> *tail;
     Node<T> *curr;
     Node<T> *Find_Node(const T &_key);
-    Node<T> *Find_Node_pos(const int pos);
+    Node<T> *Find_Node_pos(const int &pos);
 
     int count;
 
     bool Is_Empty() { return head == nullptr; }
-    bool correct_pos(short pos) { return count >= 0 && pos < count; }
+    bool correct_pos(short pos) { return pos >= 0 && pos <= count; }
 
 public:
     List()
@@ -58,7 +58,30 @@ public:
 };
 
 template <typename T>
-inline void List<T>::Add_Head(const T &knot)
+Node<T> *List<T>::Find_Node(const T &_key)
+{
+    curr = head;
+    for (int i(0); i < count; i++)
+    {
+        if (curr->key == _key)
+            return curr;
+    }
+    return nullptr;
+}
+
+template <typename T>
+Node<T> *List<T>::Find_Node_pos(const int &pos)
+{
+    if (!correct_pos(pos))
+        return nullptr;
+    curr = head;
+    for (int i = 0; i < inx; i++)
+        curr = curr->next;
+    return curr;
+}
+
+template <typename T>
+void List<T>::Add_Head(const T &knot)
 {
     Node<T> *temp = new Node<T>(knot);
     temp->next = head;
@@ -74,7 +97,7 @@ inline void List<T>::Add_Head(const T &knot)
 }
 
 template <typename T>
-inline void List<T>::Add_Tail(const T &knot)
+void List<T>::Add_Tail(const T &knot)
 {
     Node<T> *temp = new Node<T>(knot);
     temp->prev = tail;
@@ -90,7 +113,7 @@ inline void List<T>::Add_Tail(const T &knot)
 }
 
 template <typename T>
-inline void List<T>::Add_Node(const T &knot, const int &pos)
+void List<T>::Add_Node(const T &knot, const int &pos)
 {
     if (!correct_pos(pos))
         return;
@@ -114,7 +137,7 @@ inline void List<T>::Add_Node(const T &knot, const int &pos)
 }
 
 template <typename T>
-inline void List<T>::Remove_Head()
+void List<T>::Remove_Head()
 {
     if (Is_Empty())
         return;
@@ -125,12 +148,12 @@ inline void List<T>::Remove_Head()
 }
 
 template <typename T>
-inline void List<T>::Remove_Tail()
+void List<T>::Remove_Tail()
 {
 }
 
 template <typename T>
-inline void List<T>::Remove_Node(const T &knot, const int pos)
+void List<T>::Remove_Node(const T &knot, const int pos)
 {
     if (Is_Empty() || !correct_pos(pos))
         return;
