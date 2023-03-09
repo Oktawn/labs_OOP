@@ -5,8 +5,8 @@ template <typename T>
 struct Node
 {
     T key;
-    Node *next;
-    Node *prev;
+    Node<T> *next;
+    Node<T> *prev;
     Node() { next = prev = nullptr; }
     Node(const T &_key)
     {
@@ -29,7 +29,7 @@ private:
 
     int count;
 
-    bool Is_Empty() { return head == tail; }
+    bool Is_Empty() { return count == 0; }
     bool correct_pos(short pos) { return pos >= 0 && pos <= count; }
 
 public:
@@ -78,7 +78,7 @@ Node<T> *List<T>::Find_Node_pos(const int &pos)
     if (!correct_pos(pos))
         return nullptr;
     curr = head;
-    for (int i = 0; i < inx; i++)
+    for (int i = 0; i < pos; i++)
         curr = curr->next;
     return curr;
 }
@@ -100,6 +100,7 @@ void List<T>::Add_Head(const T &knot)
 {
     Node<T> *temp = new Node<T>(knot);
     temp->next = head;
+    temp->prev = nullptr;
     if (!Is_Empty())
     {
         head->prev = temp;
@@ -108,7 +109,6 @@ void List<T>::Add_Head(const T &knot)
     else
         head = tail = temp;
     count++;
-    delete temp;
 }
 
 template <typename T>
@@ -116,6 +116,7 @@ void List<T>::Add_Tail(const T &knot)
 {
     Node<T> *temp = new Node<T>(knot);
     temp->prev = tail;
+    temp->next = nullptr;
     if (tail != nullptr)
         tail->next = temp;
     if (Is_Empty())
@@ -124,7 +125,6 @@ void List<T>::Add_Tail(const T &knot)
         tail = temp;
 
     count++;
-    delete temp;
 }
 
 template <typename T>
@@ -148,7 +148,6 @@ void List<T>::Add_Node(const T &knot, const int &pos)
     Find_Node_pos(pos - 1)->next = temp;
     Find_Node_pos(pos)->prev = temp;
     count++;
-    delete temp;
 }
 
 template <typename T>
@@ -158,7 +157,7 @@ void List<T>::Remove_Head()
         return;
     Node<T> *temp = head;
     head = head->next;
-    delete temp;
+
     count--;
 }
 
@@ -169,7 +168,7 @@ void List<T>::Remove_Tail()
         return;
     Node<T> *temp = tail;
     tail = tail->prev;
-    delete temp;
+
     count--;
 }
 
@@ -193,11 +192,11 @@ void List<T>::Remove_Node(const T &knot, const int pos)
 template <typename T>
 void List<T>::Show_on_Head() const
 {
-    curr = head;
-    while (curr)
+    Node<T> *temp = head;
+    while (temp)
     {
-        std::cout << curr->key << " ";
-        curr = curr->next;
+        std::cout << temp->key << " ";
+        temp = temp->next;
     }
     std::cout << std::endl;
 }
@@ -205,11 +204,11 @@ void List<T>::Show_on_Head() const
 template <typename T>
 void List<T>::Show_on_Tail() const
 {
-    curr = tail;
-    while (curr)
+    Node<T> *temp = tail;
+    while (temp)
     {
-        std::cout << curr->key << " ";
-        curr = curr->next;
+        std::cout << temp->key << " ";
+        temp = temp->prev;
     }
     std::cout << std::endl;
 }
