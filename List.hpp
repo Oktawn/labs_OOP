@@ -36,10 +36,10 @@ public:
     List()
     {
         head = tail = nullptr;
+        curr = head;
         count = 0;
     }
     List(const List &obj) { Copy(obj); }
-    List(const T &knot) { Add_Head(knot); }
     ~List() { Clear(); }
 
     void Add_Head(const T &knot);
@@ -48,7 +48,7 @@ public:
 
     void Remove_Head();
     void Remove_Tail();
-    void Remove_Node(const T &knot, const int pos);
+    void Remove_Node(const int &pos);
 
     void Show_on_Head() const;
     void Show_on_Tail() const;
@@ -58,6 +58,7 @@ public:
 
     List<T> &operator=(const List<T> &obj);
     List<T> &operator+(const List<T> &obj);
+    const T &operator[](const int &pos);
 };
 
 template <typename T>
@@ -115,8 +116,8 @@ template <typename T>
 void List<T>::Add_Tail(const T &knot)
 {
     Node<T> *temp = new Node<T>(knot);
-    temp->prev = tail;
     temp->next = nullptr;
+    temp->prev = tail;
     if (tail != nullptr)
         tail->next = temp;
     if (Is_Empty())
@@ -157,7 +158,7 @@ void List<T>::Remove_Head()
         return;
     Node<T> *temp = head;
     head = head->next;
-
+    delete temp;
     count--;
 }
 
@@ -168,12 +169,12 @@ void List<T>::Remove_Tail()
         return;
     Node<T> *temp = tail;
     tail = tail->prev;
-
+    delete temp;
     count--;
 }
 
 template <typename T>
-void List<T>::Remove_Node(const T &knot, const int pos)
+void List<T>::Remove_Node(const int &pos)
 {
     if (Is_Empty() || !correct_pos(pos))
         return;
@@ -187,6 +188,11 @@ void List<T>::Remove_Node(const T &knot, const int pos)
         Remove_Tail();
         return;
     }
+    Node<T> *temp_prev = Find_Node_pos(pos);
+    Node<T> *temp_next = temp_prev->next->next;
+    delete temp_prev->next;
+    temp_next->prev = temp_prev;
+    temp_prev->next = temp_next;
 }
 
 template <typename T>
@@ -244,4 +250,10 @@ List<T> &List<T>::operator+(const List<T> &obj)
         temp = temp->next;
     }
     return *this;
+}
+
+template <typename T>
+const T &List<T>::operator[](const int &pos)
+{
+    return Find_Node_pos(pos)->key;
 }

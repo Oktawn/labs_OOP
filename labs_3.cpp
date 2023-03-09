@@ -2,9 +2,10 @@
 
 int main()
 {
-    List<int> temp(55);
+    List<int> temp;
     temp.Add_Head(15);
+    temp.Add_Head(44);
     temp.Add_Tail(22);
-    temp.Show_on_Head();
+    std::cout<<temp[3];
     system("pause>nul");
 }
