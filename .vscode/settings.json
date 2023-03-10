@@ -17,6 +17,7 @@
         "streambuf": "cpp",
         "system_error": "cpp",
         "tuple": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "list": "cpp"
     }
 }

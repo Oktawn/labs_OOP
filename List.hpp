@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LIST_HPP
+#define LIST_HPP
 #include <iostream>
 
 template <typename T>
@@ -30,7 +31,7 @@ private:
     int count;
 
     bool Is_Empty() { return count == 0; }
-    bool correct_pos(short pos) { return pos >= 0 && pos <= count; }
+    bool correct_pos(const int &pos) { return pos >= 0 && pos <= count; }
 
 public:
     List()
@@ -58,7 +59,18 @@ public:
 
     List<T> &operator=(const List<T> &obj);
     List<T> &operator+(const List<T> &obj);
-    const T &operator[](const int &pos);
+    T &operator[](const int &pos);
+
+    T Next()
+    {
+        curr = curr->next;
+        return curr->key;
+    }
+    T Pred()
+    {
+        curr = curr->prev;
+        return curr->key;
+    }
 };
 
 template <typename T>
@@ -253,7 +265,11 @@ List<T> &List<T>::operator+(const List<T> &obj)
 }
 
 template <typename T>
-const T &List<T>::operator[](const int &pos)
+T &List<T>::operator[](const int &pos)
 {
-    return Find_Node_pos(pos)->key;
+    if (correct_pos(pos))
+        return Find_Node_pos(pos)->key;
+    return errno;
 }
+
+#endif
