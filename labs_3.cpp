@@ -6,8 +6,9 @@ int main()
     temp.Add_Head(15);
     temp.Add_Head(44);
     temp.Add_Tail(22);
-    std::cout << temp[5] << std::endl;
+    std::cout << temp[2] << std::endl;
 
-    temp.Show_on_Head();
+    // temp.Show_on_Head();
+
     system("pause>nul");
 }

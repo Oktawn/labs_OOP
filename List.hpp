@@ -19,7 +19,9 @@ struct Node
 template <typename T>
 class List
 {
+
 private:
+    int count;
     Node<T> *head;
     Node<T> *tail;
     Node<T> *curr;
@@ -28,20 +30,23 @@ private:
 
     void Copy(const List<T> &obj);
 
-    int count;
-
-    bool Is_Empty() { return count == 0; }
     bool correct_pos(const int &pos) { return pos >= 0 && pos <= count; }
 
 public:
     List()
     {
-        head = tail = nullptr;
-        curr = head;
+        head = tail = curr = nullptr;
         count = 0;
     }
     List(const List &obj) { Copy(obj); }
+    List(const T *arr, const int &len)
+    {
+        for (int i(0); i < len; i++)
+            Add_Tail(*(arr + i));
+    }
     ~List() { Clear(); }
+
+    bool Is_Empty() { return count == 0; }
 
     void Add_Head(const T &knot);
     void Add_Tail(const T &knot);
@@ -63,12 +68,19 @@ public:
 
     T Next()
     {
-        curr = curr->next;
+        if (curr->next)
+            curr = curr->next;
         return curr->key;
     }
+
     T Pred()
     {
-        curr = curr->prev;
+        if (curr->prev)
+            curr = curr->prev;
+        return curr->key;
+    }
+    T Curr()
+    {
         return curr->key;
     }
 };
@@ -77,10 +89,11 @@ template <typename T>
 Node<T> *List<T>::Find_Node(const T &_key)
 {
     curr = head;
-    for (int i(0); i < count; i++)
+    while (curr)
     {
-        if (curr->key == _key)
+        if (Curr() == _key)
             return curr;
+        Next();
     }
     return nullptr;
 }
@@ -92,7 +105,7 @@ Node<T> *List<T>::Find_Node_pos(const int &pos)
         return nullptr;
     curr = head;
     for (int i = 0; i < pos; i++)
-        curr = curr->next;
+        Next();
     return curr;
 }
 
