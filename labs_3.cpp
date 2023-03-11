@@ -1,4 +1,4 @@
-#include "List.hpp"
+#include "Newpaper.hpp"
 
 int main()
 {
