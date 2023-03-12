@@ -39,6 +39,7 @@ public:
         count = 0;
     }
     List(const List &obj) { Copy(obj); }
+    List(const T &obj) { Add_Tail(obj); }
     List(const T *arr, const int &len)
     {
         for (int i(0); i < len; i++)
