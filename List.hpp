@@ -25,12 +25,15 @@ private:
     Node<T> *head;
     Node<T> *tail;
     Node<T> *curr;
-    Node<T> *Find_Node(const T &_key);
+
     Node<T> *Find_Node_pos(const int &pos);
 
     void Copy(const List<T> &obj);
 
-    bool correct_pos(const int &pos) { return pos >= 0 && pos <= count; }
+    bool correct_pos(const int &pos)
+    {
+        return pos >= 0 && pos <= count;
+    }
 
 public:
     List()
@@ -62,7 +65,7 @@ public:
     void Show_Node(const int &pos) const;
 
     void Clear();
-
+    Node<T> *Find_Node(const T &_key);
     List<T> &operator=(const List<T> &obj);
     List<T> &operator+(const List<T> &obj);
     T &operator[](const int &pos);
