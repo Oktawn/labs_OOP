@@ -38,11 +38,16 @@ private:
 public:
     List()
     {
-        head = tail = curr = nullptr;
+        head = tail = nullptr;
         count = 0;
     }
     List(const List &obj) { Copy(obj); }
-    List(const T &obj) { Add_Tail(obj); }
+    List(const T &obj)
+    {
+        head = tail = nullptr;
+        count = 0;
+        Add_Head(obj);
+    }
     List(const T *arr, const int &len)
     {
         for (int i(0); i < len; i++)
@@ -50,7 +55,7 @@ public:
     }
     ~List() { Clear(); }
 
-    bool Is_Empty() { return count == 0; }
+    bool Is_Empty() { return head == nullptr; }
 
     void Add_Head(const T &knot);
     void Add_Tail(const T &knot);
@@ -129,30 +134,34 @@ template <typename T>
 void List<T>::Add_Head(const T &knot)
 {
     Node<T> *temp = new Node<T>(knot);
-    temp->next = head;
-    temp->prev = nullptr;
+
     if (!Is_Empty())
     {
+        temp->next = head;
         head->prev = temp;
         head = temp;
     }
     else
         head = tail = temp;
+
     count++;
 }
 
 template <typename T>
 void List<T>::Add_Tail(const T &knot)
 {
-    Node<T> *temp = new Node<T>(knot);
-    temp->next = nullptr;
-    temp->prev = tail;
-    if (tail != nullptr)
-        tail->next = temp;
     if (Is_Empty())
-        head = tail = temp;
+    {
+        Add_Head(knot);
+        return;
+    }
     else
+    {
+        Node<T> *temp = new Node<T>(knot);
+        temp->prev = tail;
+        tail->next = temp;
         tail = temp;
+    }
 
     count++;
 }

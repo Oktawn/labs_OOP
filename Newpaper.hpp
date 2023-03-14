@@ -14,18 +14,29 @@ private:
 
 public:
     Newpaper();
+    Newpaper(int, int, int, int, List<std::string>, List<std::string>);
+    Newpaper(const Newpaper &C)
+        : number(C.number), years(C.years), copies_sold(C.copies_sold), all_copies(C.all_copies),
+          list_articles(C.list_articles), list_author(C.list_author) {}
     ~Newpaper()
     {
     }
 
     void Get_info() const;
 
+    void Show_number() const;
+    void Show_years() const;
+    void Show_articles() const;
+    void Show_author() const;
+    void Show_sold() const;
+    void Show_all() const;
+
     void Add_author(const std::string &aut);
     void Add_articler(const std::string &art);
 
     void Change_author(const std::string &aut_old, const std::string &aut_new);
     void Change_articler(const std::string &art_old, const std::string &art_new);
-    
+
     void Change_sold(const int &sold);
     void Change_all_copies(const int &cop);
 
@@ -39,6 +50,17 @@ Newpaper::Newpaper()
     : number(000), years(1970), copies_sold(0), all_copies(0),
       list_articles("bib"), list_author("bruh") {}
 
+Newpaper::Newpaper(int number, int years, int copies_sold, int all_copies,
+                   List<std::string> list_articles, List<std::string> list_author)
+{
+    this->number = number;
+    this->years = years;
+    this->all_copies = all_copies;
+    this->copies_sold = copies_sold;
+    this->list_articles = list_articles;
+    this->list_author = list_author;
+}
+
 void Newpaper::Get_info() const
 {
     std::cout << "number: " << number << std::endl
@@ -47,6 +69,38 @@ void Newpaper::Get_info() const
     std::cout
         << "sold copies: " << copies_sold << std::endl
         << "all copies: " << all_copies << std::endl;
+}
+
+void Newpaper::Show_number() const
+{
+    std::cout << "number newpaper: " << number << std::endl;
+}
+
+void Newpaper::Show_years() const
+{
+    std::cout << "years newpaper: " << years << std::endl;
+}
+
+void Newpaper::Show_articles() const
+{
+    std::cout << "articles newpaper: ";
+    list_articles.Show_on_Head();
+}
+
+void Newpaper::Show_author() const
+{
+    std::cout << " author newpaper: ";
+    list_author.Show_on_Head();
+}
+
+void Newpaper::Show_sold() const
+{
+    std::cout << "sold copies newpaper: " << copies_sold << std::endl;
+}
+
+void Newpaper::Show_all() const
+{
+    std::cout << "all copies newpaper: " << all_copies << std::endl;
 }
 
 void Newpaper::Add_author(const std::string &aut)
