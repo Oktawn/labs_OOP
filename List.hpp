@@ -38,16 +38,11 @@ private:
 public:
     List()
     {
-        head = tail = nullptr;
+        head = tail = curr = nullptr;
         count = 0;
     }
     List(const List &obj) { Copy(obj); }
-    List(const T &obj)
-    {
-        head = tail = nullptr;
-        count = 0;
-        Add_Head(obj);
-    }
+    List(const T &obj) { Add_Head(obj); }
     List(const T *arr, const int &len)
     {
         for (int i(0); i < len; i++)
@@ -79,14 +74,14 @@ public:
     {
         if (curr->next)
             curr = curr->next;
-        return curr->key;
+        return curr;
     }
 
     T Pred()
     {
         if (curr->prev)
             curr = curr->prev;
-        return curr->key;
+        return curr;
     }
     T Curr()
     {

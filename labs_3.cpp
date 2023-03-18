@@ -2,10 +2,13 @@
 
 int main()
 {
-   Newpaper temp;
-   temp.Add_author("bbb");
+    Newpaper temp;
+    
+    temp.Add_author("bbb");
 
-   temp.Show_author();
+    temp.Change_author("bbb", "qq");
+
+    temp.Show_author();
 
     system("pause>nul");
     return 0;

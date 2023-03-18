@@ -44,6 +44,8 @@ public:
     void Change_number(const int &num, const int &sold);
 
     void Get_per_sold_number() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Newpaper &nw);
 };
 
 Newpaper::Newpaper()
@@ -115,7 +117,7 @@ void Newpaper::Add_articler(const std::string &art)
 
 void Newpaper::Change_author(const std::string &aut_old, const std::string &aut_new)
 {
-    if (list_author.Find_Node(aut_old) != nullptr)
+    if (list_author.Find_Node(aut_old)->key == aut_old)
         list_author.Find_Node(aut_old)->key = aut_new;
     else
         std::cout << "no found author\n";
@@ -158,6 +160,16 @@ void Newpaper::Change_number(const int &num, const int &sold)
 void Newpaper::Get_per_sold_number() const
 {
     std::cout << ((double)copies_sold / all_copies) * 100 << "%\n";
+}
+
+std::ostream &operator<<(std::ostream &os, const Newpaper &nw)
+{
+    os << nw.number << "\n"
+       << nw.years << "\n";
+    nw.list_articles.Show_on_Head();
+    nw.list_author.Show_on_Head();
+    os << nw.copies_sold << "\n"
+       << nw.all_copies << "\n";
 }
 
 #endif
