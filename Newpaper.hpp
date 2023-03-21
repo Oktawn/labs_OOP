@@ -9,27 +9,24 @@ private:
     int years;
     int copies_sold;
     int all_copies;
-    List<std::string> list_author;
-    List<std::string> list_articles;
+    std::vector<std::string> list_author;
+    std::vector<std::string> list_articles;
 
 public:
     Newpaper();
-    Newpaper(int, int, int, int, List<std::string>, List<std::string>);
-    Newpaper(const Newpaper &C)
+    Newpaper(int, int, int, int, std::vector<std::string>, std::vector<std::string>);
+    Newpaper(Newpaper &C)
         : number(C.number), years(C.years), copies_sold(C.copies_sold), all_copies(C.all_copies),
           list_articles(C.list_articles), list_author(C.list_author) {}
-    ~Newpaper()
-    {
-    }
 
-    void Get_info() const;
+    void Get_info();
 
-    void Show_number() const;
-    void Show_years() const;
-    void Show_articles() const;
-    void Show_author() const;
-    void Show_sold() const;
-    void Show_all() const;
+    void Show_number();
+    void Show_years();
+    void Show_articles();
+    void Show_author();
+    void Show_sold();
+    void Show_all();
 
     void Add_author(const std::string &aut);
     void Add_articler(const std::string &art);
@@ -37,23 +34,30 @@ public:
     void Change_author(const std::string &aut_old, const std::string &aut_new);
     void Change_articler(const std::string &art_old, const std::string &art_new);
 
-    void Change_sold(const int &sold);
-    void Change_all_copies(const int &cop);
+    void Change_sold(const int &sold) { this->copies_sold = sold; }
+    void Change_all_copies(const int &cop) { this->all_copies = cop; }
 
-    void Change_number(const int &num);
-    void Change_number(const int &num, const int &sold);
+    void Change_number(const int &num) { this->number = num; }
+    void Change_number(const int &num, const int &sold)
+    {
+        Change_number(num);
+        Change_sold(sold);
+    }
 
-    void Get_per_sold_number() const;
+    void Get_per_sold_number();
 
-    friend std::ostream &operator<<(std::ostream &os, const Newpaper &nw);
+    friend std::ostream &operator<<(std::ostream &os, Newpaper &nw);
 };
 
 Newpaper::Newpaper()
-    : number(000), years(1970), copies_sold(0), all_copies(0),
-      list_articles("bib"), list_author("bruh") {}
+    : number(0), years(1970), copies_sold(0), all_copies(0)
+{
+    list_articles.push_back("bub");
+    list_author.push_back("gg");
+}
 
 Newpaper::Newpaper(int number, int years, int copies_sold, int all_copies,
-                   List<std::string> list_articles, List<std::string> list_author)
+                   std::vector<std::string> list_articles, std::vector<std::string> list_author)
 {
     this->number = number;
     this->years = years;
@@ -63,113 +67,102 @@ Newpaper::Newpaper(int number, int years, int copies_sold, int all_copies,
     this->list_author = list_author;
 }
 
-void Newpaper::Get_info() const
+void Newpaper::Get_info()
 {
     std::cout << "number: " << number << std::endl
               << "years: " << years << std::endl;
-    list_articles.Show_on_Head(), list_author.Show_on_Head();
+    Show_articles(), Show_author();
     std::cout
         << "sold copies: " << copies_sold << std::endl
         << "all copies: " << all_copies << std::endl;
 }
 
-void Newpaper::Show_number() const
+void Newpaper::Show_number()
 {
     std::cout << "number newpaper: " << number << std::endl;
 }
 
-void Newpaper::Show_years() const
+void Newpaper::Show_years()
 {
     std::cout << "years newpaper: " << years << std::endl;
 }
 
-void Newpaper::Show_articles() const
+void Newpaper::Show_articles()
 {
     std::cout << "articles newpaper: ";
-    list_articles.Show_on_Head();
+    for (auto &i : list_articles)
+        std::cout << i << " ";
+    std::cout << std::endl;
 }
 
-void Newpaper::Show_author() const
+void Newpaper::Show_author()
 {
-    std::cout << " author newpaper: ";
-    list_author.Show_on_Head();
+    std::cout << "author newpaper: ";
+    for (auto &i : list_author)
+        std::cout << i << " ";
+    std::cout << std::endl;
 }
 
-void Newpaper::Show_sold() const
+void Newpaper::Show_sold()
 {
     std::cout << "sold copies newpaper: " << copies_sold << std::endl;
 }
 
-void Newpaper::Show_all() const
+void Newpaper::Show_all()
 {
     std::cout << "all copies newpaper: " << all_copies << std::endl;
 }
 
 void Newpaper::Add_author(const std::string &aut)
 {
-    list_author.Add_Tail(aut);
+    list_author.push_back(aut);
 }
 
 void Newpaper::Add_articler(const std::string &art)
 {
-    list_articles.Add_Tail(art);
+    list_articles.push_back(art);
 }
 
 void Newpaper::Change_author(const std::string &aut_old, const std::string &aut_new)
 {
-    if (list_author.Find_Node(aut_old)->key == aut_old)
-        list_author.Find_Node(aut_old)->key = aut_new;
-    else
-        std::cout << "no found author\n";
+    for (auto &i : list_author)
+    {
+        if (i == aut_old)
+        {
+            i = aut_new;
+            return;
+        }
+    }
+    std::cout << "no found author\n";
 }
 
 void Newpaper::Change_articler(const std::string &art_old, const std::string &art_new)
 {
-    if (list_articles.Find_Node(art_old) != nullptr)
-        list_articles.Find_Node(art_old)->key = art_new;
-    else
-        std::cout << "no found articles\n";
+    for (auto &i : list_articles)
+    {
+        if (i == art_old)
+        {
+            i = art_new;
+            return;
+        }
+    }
+    std::cout << "no found articler\n";
 }
-
-void Newpaper::Change_sold(const int &sold)
-{
-    if (sold > copies_sold)
-        copies_sold = sold;
-    else
-        std::cout << "there should be more copies sold\n";
-}
-
-void Newpaper::Change_all_copies(const int &cop)
-{
-    if (cop > all_copies)
-        all_copies = cop;
-    else
-        std::cout << "there should be more copies\n";
-}
-
-void Newpaper::Change_number(const int &num)
-{
-    number = num;
-}
-
-void Newpaper::Change_number(const int &num, const int &sold)
-{
-    Change_number(num), Change_sold(sold);
-}
-
-void Newpaper::Get_per_sold_number() const
+void Newpaper::Get_per_sold_number()
 {
     std::cout << ((double)copies_sold / all_copies) * 100 << "%\n";
 }
 
-std::ostream &operator<<(std::ostream &os, const Newpaper &nw)
+std::ostream &operator<<(std::ostream &os, Newpaper &nw)
 {
     os << nw.number << "\n"
        << nw.years << "\n";
-    nw.list_articles.Show_on_Head();
-    nw.list_author.Show_on_Head();
+
+    nw.Show_author();
+    nw.Show_articles();
     os << nw.copies_sold << "\n"
        << nw.all_copies << "\n";
+    return os;
 }
 
 #endif

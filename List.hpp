@@ -1,17 +1,18 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <iostream>
+#include <vector>
 
 template <typename T>
 struct Node
 {
     T key;
-    Node<T> *next;
-    Node<T> *prev;
+    Node *next;
+    Node *prev;
     Node() { next = prev = nullptr; }
-    Node(const T &_key)
+    Node(T _key)
     {
-        key = _key;
+        this->key = _key;
         next = prev = nullptr;
     }
 };
@@ -19,9 +20,8 @@ struct Node
 template <typename T>
 class List
 {
-
 private:
-    int count;
+    int size;
     Node<T> *head;
     Node<T> *tail;
     Node<T> *curr;
@@ -32,61 +32,46 @@ private:
 
     bool correct_pos(const int &pos)
     {
-        return pos >= 0 && pos <= count;
+        return (pos >= 0) && (pos < size);
     }
+    bool Is_Empty() { return head == nullptr; }
 
 public:
     List()
     {
         head = tail = curr = nullptr;
-        count = 0;
+        size = 0;
     }
-    List(const List &obj) { Copy(obj); }
-    List(const T &obj) { Add_Head(obj); }
-    List(const T *arr, const int &len)
-    {
-        for (int i(0); i < len; i++)
-            Add_Tail(*(arr + i));
-    }
+    List(T obj) { Add_Head(obj); };
     ~List() { Clear(); }
+    // List(List& obj) { Copy(obj); }
+    // List(T* arr, int& len)
+    //{
+    //	for (int i(0); i < len; i++)
+    //		Add_Tail(*(arr + i));
+    // }
 
-    bool Is_Empty() { return head == nullptr; }
-
-    void Add_Head(const T &knot);
-    void Add_Tail(const T &knot);
-    void Add_Node(const T &knot, const int &pos);
+    void Add_Head(T knot);
+    void Add_Tail(T knot);
+    void Add_Node(T knot, const int &pos);
 
     void Remove_Head();
     void Remove_Tail();
     void Remove_Node(const int &pos);
 
-    void Show_on_Head() const;
-    void Show_on_Tail() const;
-    void Show_Node(const int &pos) const;
+    void Show_on_Head();
+    void Show_on_Tail();
+    void Show_Node(const int &pos);
 
     void Clear();
+
     Node<T> *Find_Node(const T &_key);
     List<T> &operator=(const List<T> &obj);
-    List<T> &operator+(const List<T> &obj);
-    T &operator[](const int &pos);
+    T operator[](const int &pos);
 
-    T Next()
-    {
-        if (curr->next)
-            curr = curr->next;
-        return curr;
-    }
-
-    T Pred()
-    {
-        if (curr->prev)
-            curr = curr->prev;
-        return curr;
-    }
-    T Curr()
-    {
-        return curr->key;
-    }
+    T Next() { return curr->next->key; }
+    T Pred() { return curr->pred->key; }
+    T Curr() { return curr->key; }
 };
 
 template <typename T>
@@ -95,7 +80,7 @@ Node<T> *List<T>::Find_Node(const T &_key)
     curr = head;
     while (curr)
     {
-        if (Curr() == _key)
+        if (curr->key == _key)
             return curr;
         Next();
     }
@@ -109,7 +94,7 @@ Node<T> *List<T>::Find_Node_pos(const int &pos)
         return nullptr;
     curr = head;
     for (int i = 0; i < pos; i++)
-        Next();
+        curr = curr->next;
     return curr;
 }
 
@@ -118,7 +103,7 @@ void List<T>::Copy(const List<T> &obj)
 {
     Clear();
     Node<T> *temp = obj.head;
-    while (temp)
+    while (temp != nullptr)
     {
         Add_Tail(temp->key);
         temp = temp->next;
@@ -126,47 +111,63 @@ void List<T>::Copy(const List<T> &obj)
 }
 
 template <typename T>
-void List<T>::Add_Head(const T &knot)
+void List<T>::Add_Head(T knot)
 {
-    Node<T> *temp = new Node<T>(knot);
-
-    if (!Is_Empty())
-    {
-        temp->next = head;
-        head->prev = temp;
-        head = temp;
-    }
-    else
-        head = tail = temp;
-
-    count++;
-}
-
-template <typename T>
-void List<T>::Add_Tail(const T &knot)
-{
-    if (Is_Empty())
-    {
-        Add_Head(knot);
-        return;
-    }
-    else
+    try
     {
         Node<T> *temp = new Node<T>(knot);
-        temp->prev = tail;
-        tail->next = temp;
-        tail = temp;
+        if (head == nullptr)
+        {
+            head = temp;
+            tail = temp;
+            tail->next = nullptr;
+        }
+        else
+        {
+            head->prev = temp;
+            temp->next = head;
+            head = temp;
+            head->prev = nullptr;
+        }
+        size++;
+        curr = head;
     }
-
-    count++;
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 template <typename T>
-void List<T>::Add_Node(const T &knot, const int &pos)
+void List<T>::Add_Tail(T knot)
+{
+    try
+    {
+        if (Is_Empty())
+        {
+            Add_Head(knot);
+            return;
+        }
+        else
+        {
+            Node<T> *temp = new Node<T>(knot);
+            tail->next = temp;
+        }
+        curr = tail;
+        size++;
+    }
+    catch (std::bad_alloc &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+}
+
+template <typename T>
+void List<T>::Add_Node(T knot, const int &pos)
 {
     if (!correct_pos(pos))
         return;
-    if (pos == count)
+    if (pos == size - 1)
     {
         Add_Tail(knot);
         return;
@@ -181,29 +182,27 @@ void List<T>::Add_Node(const T &knot, const int &pos)
     temp->next = Find_Node_pos(pos);
     Find_Node_pos(pos - 1)->next = temp;
     Find_Node_pos(pos)->prev = temp;
-    count++;
+    size++;
 }
 
 template <typename T>
 void List<T>::Remove_Head()
 {
-    if (Is_Empty())
-        return;
     Node<T> *temp = head;
     head = head->next;
     delete temp;
-    count--;
+    size--;
 }
 
 template <typename T>
 void List<T>::Remove_Tail()
 {
-    if (Is_Empty())
-        return;
+
     Node<T> *temp = tail;
-    tail = tail->prev;
+    tail = temp->prev;
+    tail->next = nullptr;
     delete temp;
-    count--;
+    size--;
 }
 
 template <typename T>
@@ -216,20 +215,19 @@ void List<T>::Remove_Node(const int &pos)
         Remove_Head();
         return;
     }
-    if (pos == count - 1)
+    if (pos == size - 1)
     {
         Remove_Tail();
         return;
     }
-    Node<T> *temp_prev = Find_Node_pos(pos);
-    Node<T> *temp_next = temp_prev->next->next;
-    delete temp_prev->next;
-    temp_next->prev = temp_prev;
-    temp_prev->next = temp_next;
+    Node<T> *temp = Find_Node_pos(pos);
+    temp->next->prev = temp->next;
+    temp->prev->next = temp->prev;
+    delete temp;
 }
 
 template <typename T>
-void List<T>::Show_on_Head() const
+void List<T>::Show_on_Head()
 {
     Node<T> *temp = head;
     while (temp)
@@ -241,7 +239,7 @@ void List<T>::Show_on_Head() const
 }
 
 template <typename T>
-void List<T>::Show_on_Tail() const
+void List<T>::Show_on_Tail()
 {
     Node<T> *temp = tail;
     while (temp)
@@ -253,7 +251,7 @@ void List<T>::Show_on_Tail() const
 }
 
 template <typename T>
-void List<T>::Show_Node(const int &pos) const
+void List<T>::Show_Node(const int &pos)
 {
     std::cout << Find_Node_pos(pos)->key << std::endl;
 }
@@ -269,28 +267,13 @@ template <typename T>
 List<T> &List<T>::operator=(const List<T> &obj)
 {
     Copy(obj);
-
     return *this;
 }
 
 template <typename T>
-List<T> &List<T>::operator+(const List<T> &obj)
-{
-    Node<T> *temp = obj;
-    while (temp)
-    {
-        Add_Tail(temp);
-        temp = temp->next;
-    }
-    return *this;
-}
-
-template <typename T>
-T &List<T>::operator[](const int &pos)
+T List<T>::operator[](const int &pos)
 {
     if (correct_pos(pos))
         return Find_Node_pos(pos)->key;
-    return errno;
 }
-
 #endif
