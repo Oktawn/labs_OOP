@@ -31,7 +31,7 @@ private:
 
 	bool correct_pos(const int& pos) { return (pos >= 0) && (pos < size); }
 
-	
+
 
 public:
 	List()
@@ -72,6 +72,11 @@ public:
 	T Next() { return curr->next->key; }
 	T Pred() { return curr->pred->key; }
 	T Curr() { return curr->key; }
+
+	T Get_head() const { return head->key; }
+	T Get_tail() const { return tail->key; }
+
+
 };
 
 template <typename T>
