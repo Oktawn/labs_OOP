@@ -1,7 +1,6 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <iostream>
-#include <vector>
 
 template <typename T>
 struct Node
