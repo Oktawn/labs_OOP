@@ -29,27 +29,24 @@ private:
 
 	void Copy(const List<T>& obj);
 
-	bool correct_pos(const int& pos)
-	{
-		return (pos >= 0) && (pos < size);
-	}
-	bool Is_Empty() { return head == nullptr; }
+	bool correct_pos(const int& pos) { return (pos >= 0) && (pos < size); }
+
+	
 
 public:
 	List()
 	{
-		head = tail = curr = nullptr;
+		// head = tail = curr = nullptr;
 		size = 0;
 	}
 	List(T obj) { Add_Head(obj); };
 	~List() { Clear(); }
-	//List(List& obj) { Copy(obj); }
-	//List(T* arr, int& len)
+	// List(List& obj) { Copy(obj); }
+	// List(T* arr, int& len)
 	//{
 	//	for (int i(0); i < len; i++)
 	//		Add_Tail(*(arr + i));
-	//}
-
+	// }
 
 	void Add_Head(T knot);
 	void Add_Tail(T knot);
@@ -65,9 +62,11 @@ public:
 
 	void Clear();
 
+	bool Is_Empty() { return head == nullptr; }
+
 	Node<T>* Find_Node(const T& _key);
 	List<T>& operator=(const List<T>& obj);
-	//List<T>& operator+(List<T>& obj);
+	// List<T>& operator+(List<T>& obj);
 	T operator[](const int& pos);
 
 	T Next() { return curr->next->key; }
@@ -112,56 +111,39 @@ void List<T>::Copy(const List<T>& obj)
 template <typename T>
 void List<T>::Add_Head(T knot)
 {
-	try
+	Node<T>* temp = new Node<T>(knot);
+	if (Is_Empty())
 	{
-		Node<T>* temp = new Node<T>(knot);
-		if (head == nullptr)
-		{
-			head = temp;
-			tail = temp;
-			tail->next = nullptr;
-		}
-		else
-		{
-			head->prev = temp;
-			temp->next = head;
-			head = temp;
-			head->prev = nullptr;
-		}
-		size++;
-		curr = head;
+		head = tail = temp;
 	}
-	catch (const std::exception& e)
+	else
 	{
-		std::cerr << e.what() << std::endl;
+		head->prev = temp;
+		temp->next = head;
+		head = temp;
+		head->prev = nullptr;
 	}
-
+	size++;
+	curr = head;
 }
 
 template <typename T>
 void List<T>::Add_Tail(T knot)
 {
-	try
+	if (Is_Empty())
 	{
-		if (Is_Empty())
-		{
-			Add_Head(knot);
-			return;
-		}
-		else
-		{
-			Node<T>* temp = new Node<T>(knot);
-			tail->next = temp;
-		}
-		curr = tail;
-		size++;
-
+		Add_Head(knot);
+		return;
 	}
-	catch (std::bad_alloc& e)
+	else
 	{
-		std::cerr << e.what() << std::endl;
+		Node<T>* temp = new Node<T>(knot);
+		tail->next = temp;
+		temp->prev = tail;
+		tail = temp;
 	}
-
+	curr = tail;
+	size++;
 }
 
 template <typename T>
@@ -272,8 +254,8 @@ List<T>& List<T>::operator=(const List<T>& obj)
 	return *this;
 }
 
-//template <typename T>
-//List<T>& List<T>::operator+(List<T>& obj)
+// template <typename T>
+// List<T>& List<T>::operator+(List<T>& obj)
 //{
 //	Node<T>* temp = obj;
 //	while (temp)
@@ -282,7 +264,7 @@ List<T>& List<T>::operator=(const List<T>& obj)
 //		temp = temp->next;
 //	}
 //	return *this;
-//}
+// }
 
 template <typename T>
 T List<T>::operator[](const int& pos)
