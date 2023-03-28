@@ -113,53 +113,39 @@ void List<T>::Copy(const List<T> &obj)
 template <typename T>
 void List<T>::Add_Head(T knot)
 {
-    try
-    {
-        Node<T> *temp = new Node<T>(knot);
-        if (head == nullptr)
-        {
-            head = temp;
-            tail = temp;
-            tail->next = nullptr;
-        }
-        else
-        {
-            head->prev = temp;
-            temp->next = head;
-            head = temp;
-            head->prev = nullptr;
-        }
-        size++;
-        curr = head;
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
+    Node<T>* temp = new Node<T>(knot);
+	if (Is_Empty())
+	{
+		head = tail = temp;
+	}
+	else
+	{
+		head->prev = temp;
+		temp->next = head;
+		head = temp;
+		head->prev = nullptr;
+	}
+	size++;
+	curr = head;
 }
 
 template <typename T>
 void List<T>::Add_Tail(T knot)
 {
-    try
-    {
-        if (Is_Empty())
-        {
-            Add_Head(knot);
-            return;
-        }
-        else
-        {
-            Node<T> *temp = new Node<T>(knot);
-            tail->next = temp;
-        }
-        curr = tail;
-        size++;
-    }
-    catch (std::bad_alloc &e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
+	if (Is_Empty())
+	{
+		Add_Head(knot);
+		return;
+	}
+	else
+	{
+		Node<T>* temp = new Node<T>(knot);
+		tail->next = temp;
+		temp->prev = tail;
+		tail = temp;
+	}
+	curr = tail;
+	size++;
 }
 
 template <typename T>
