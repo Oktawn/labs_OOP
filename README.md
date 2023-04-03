@@ -40,3 +40,7 @@
 Используйте алгоритм вычисления постфиксных выражений, описанный ниже. Допускаются лишь операторы +, -, * и /.
 
 Предполагается, что постфиксные выражения являются корректными.
+
+Пример работы:
+
+![](https://sun9-50.userapi.com/impg/HSvjdfo_WF1WWh8dURiNgbkUUldHl1MemPvF2Q/OkIRd1rpIsk.jpg?size=649x303&quality=96&sign=6d35695c3fd2bc77fb2eb110345dde0e&type=album)
