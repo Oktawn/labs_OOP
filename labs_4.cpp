@@ -1,18 +1,10 @@
-#include "Deque.hpp"
+#include "Interface.hpp"
 
 int main()
 {
-    Deque<int> deq;
-    deq.push_front(44);
-    deq.push_back(33);
-    deq.push_back(11);
-    deq.push_back(13);
-    deq.push_back(5);
-    deq.push_front(22);
-    deq.show_all();
-    std::cout<<deq.is_empty();
-   
-
-    system("pause>nul");
-    return 0;
+	//system("chcp 1251>nul");
+	visual();
+	std::wcout << "\nDone!\n";
+	system("pause>nul");
+	return 0;
 }

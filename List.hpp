@@ -1,6 +1,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 #include <iostream>
+#include <string>
 
 template <typename T>
 struct Node
@@ -36,7 +37,7 @@ private:
 public:
 	List()
 	{
-		// head = tail = curr = nullptr;
+		head = tail = curr = nullptr;
 		size = 0;
 	}
 	List(T obj) { Add_Head(obj); };
