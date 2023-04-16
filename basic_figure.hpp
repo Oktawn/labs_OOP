@@ -1,16 +1,15 @@
 #pragma once
-#include "List.hpp"
 
-template <typename T>
+#define _USE_MATH_DEFINES
+#include <iostream>
+#include <cmath>
+
 class Shape
 {
 public:
-    Shape() {}
     static double sum_square;
-    void move(double) = 0;
-    void scale(double) = 0;
-    void show_attributes() = 0;
-    void show_characteristic() = 0;
-
-    friend bool operator>(T F1, T F2);
+    virtual void move(double) = 0;
+    virtual void scale(double) = 0;
+    virtual void show_attributes() = 0;
+    virtual void show_characteristic() = 0;
 };
