@@ -11,7 +11,7 @@ class Circle : Shape
 public:
     Circle(double x, double y, double radius)
         : x(x), y(y), radius(radius) {}
-    ~Circle() {}
+    Circle() : x(0), y(0), radius(0) {}
 
     void move(double);
     void scale(double);
@@ -19,8 +19,8 @@ public:
     void show_characteristic();
 
     double get_square();
-    double get_perimetr();
     double get_diametr();
+    double get_perimetr();
     double get_sector_square(double p);
 
     double set_x(double x) { this->x = x; }
