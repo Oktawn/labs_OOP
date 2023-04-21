@@ -28,6 +28,7 @@ void Circle::show_characteristic()
 
 double Circle::get_square()
 {
+    //sum_square += M_PI * radius * radius;
     return M_PI * radius * radius;
 }
 
@@ -43,5 +44,5 @@ double Circle::get_diametr()
 
 double Circle::get_sector_square(double p)
 {
-    return 1 / 2 * p * radius;
+    return 1.0 / 2 * p * radius;
 }
