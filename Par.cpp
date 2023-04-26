@@ -1,25 +1,24 @@
 #include "Par.hpp"
 
-
 void Par::move(double z)
 {
-	x += z, y += z;
-	x1 += z, y1 += z;
+	x.x += z, x.y += z;
+	x1.x += z, x1.y += z;
 }
 
 void Par::scale(double z)
 {
-	x *= z, y *= z, lenght_side *= z;
-	x1 *= z, y1 *= z;
+	x.x *= z, x.y *= z, lenght_side *= z;
+	x1.x *= z, x1.y *= z;
 }
 
 void Par::show_attributes()
 {
 	std::cout
-		<< "x0: " << x << "\n"
-		<< "y0: " << y << "\n"
-		<< "x1: " << x1 << "\n"
-		<< "y1: " << y1 << "\n"
+		<< "x0: " << x.x << "\n"
+		<< "y0: " << x.y << "\n"
+		<< "x1: " << x1.x << "\n"
+		<< "y1: " << x1.y << "\n"
 		<< "side: " << lenght_side << "\n";
 }
 
@@ -45,12 +44,13 @@ double Par::get_perimetr()
 
 double Par::get_diagonal()
 {
-	return sqrt(pow((x1 - x), 2) + pow((y1 - y), 2));
+	return sqrt(pow((x1.x - x.x), 2) + pow((x1.y - x.y), 2));
 }
 
 double Par::get_diagonal_2()
 {
-	return sqrt(pow(((x1 - lenght_side) - (x + lenght_side)), 2) + pow((y1 - y), 2));
+	return sqrt(pow(((x1.x - lenght_side) - (x.x + lenght_side)), 2) +
+				pow((x1.y - x.y), 2));
 }
 
 double Par::get_square()
@@ -65,14 +65,15 @@ double Par::get_lenght()
 
 double Par::get_height()
 {
-	return y1 - y;
+	return x1.y - x.y;
 }
 
 double Par::get_wight()
 {
 	return sqrt(
 		(pow(get_diagonal(), 2) + pow(get_diagonal_2(), 2) -
-			2 * pow(lenght_side, 2)) / 2);
+		 2 * pow(lenght_side, 2)) /
+		2);
 }
 
 double Par::get_angular_a()

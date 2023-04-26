@@ -1,25 +1,20 @@
 #include "basic_figure.hpp"
 
-
 class Par : public Shape
 {
 private:
+	Point x, x1;
 	double
-		x,
-		x1,
-
-		y,
-		y1,
 
 		lenght_side;
 
 public:
 	Par(double x, double y, double x1, double y1, double side)
-		: x(x), y(y), x1(x1), y1(y1), lenght_side(side) 
+		: x(x, y), x1(x1, y1), lenght_side(side)
 	{
 		sum_square += get_square();
 	}
-	Par() : x(0), y(0), x1(0), y1(0), lenght_side(0) {}
+	Par() : x(0, 0), x1(0, 0), lenght_side(0) {}
 	~Par() {}
 
 	void move(double);
@@ -37,7 +32,5 @@ public:
 	double get_angular_a();
 	double get_angular_b();
 
-	void set_x(double x) { this->x = x; }
-	void set_y(double y) { this->y = y; }
 	void set_side(double side) { this->lenght_side = side; }
 };

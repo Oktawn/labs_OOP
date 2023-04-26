@@ -5,7 +5,6 @@
 #include <iostream>
 #include <cmath>
 
-
 class Shape
 {
 
@@ -23,8 +22,18 @@ public:
 		return sum_square;
 	}
 
-	bool operator>(Shape& S)
+	bool operator>(Shape &S)
 	{
 		return this->get_square() > S.get_square();
+	}
+};
+
+struct Point
+{
+	double x, y;
+	Point(double x, double y) : x(x), y(y) {}
+	double distance(Point b)
+	{
+		return sqrt(pow((x - b.x), 2) + pow((y - b.y), 2));
 	}
 };

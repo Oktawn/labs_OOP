@@ -2,19 +2,19 @@
 
 void Circle::move(double z)
 {
-    x += z, y += z;
+    x.x += z, x.y += z;
 }
 
 void Circle::scale(double z)
 {
-    x *= z, y *= z, radius *= z;
+    radius *= z;
 }
 
 void Circle::show_attributes()
 {
     std::cout
-        << "x: " << x << "\n"
-        << "y: " << y << "\n"
+        << "x: " << x.x << "\n"
+        << "y: " << x.y << "\n"
         << "radius: " << radius << "\n";
 }
 
@@ -28,7 +28,7 @@ void Circle::show_characteristic()
 
 double Circle::get_square()
 {
-    //sum_square += M_PI * radius * radius;
+    // sum_square += M_PI * radius * radius;
     return M_PI * radius * radius;
 }
 
