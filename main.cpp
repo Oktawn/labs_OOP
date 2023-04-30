@@ -1,23 +1,25 @@
-#include "work_1.cpp"
-
-using namespace work_1;
-// using namespace work_3;
+#include "labs.hpp"
 
 int main()
 {
+
     std::vector<int> vec;
-    std::list<CCall> paper;
-    create(vec);
+    create_v(vec);
     zero_after_neg(vec);
     mul_pos(vec);
-    compres_vec(vec, 5);
 
-    CCall call;
-    paper.push_back(call);
-    paper.back().show_call();
+    std::list<CCall> call;
 
+    CCall tes;
+    call.push_back(tes);
+    call.back().show_call();
+    std::cout << "\n";
     Newpaper pap;
 
-    system("pause>nul");
+    std::map<set_map> map_pap;
+    map_pap[555]=pap;
+    it_m = map_pap.begin();
+    std::cout<< (*it_m).second << "\n";
+
     return 0;
 }
