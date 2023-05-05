@@ -65,7 +65,7 @@ double Par::get_lenght()
 
 double Par::get_height()
 {
-	return x1.y - x.y;
+	return abs(x1.y - x.y);
 }
 
 double Par::get_wight()

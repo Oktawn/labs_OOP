@@ -23,7 +23,8 @@ void Circle::show_characteristic()
     std::cout
         << "square: " << get_square() << "\n"
         << "lenght: " << get_perimetr() << "\n"
-        << "diametr: " << get_diametr() << "\n";
+        << "diametr: " << get_diametr() << "\n"
+        << "sector 10 degree: " << get_sector_square(10) << "\n";
 }
 
 double Circle::get_square()
@@ -44,5 +45,5 @@ double Circle::get_diametr()
 
 double Circle::get_sector_square(double p)
 {
-    return 1.0 / 2 * p * radius;
+    return M_PI * (radius * radius)*(p/360.0);
 }
