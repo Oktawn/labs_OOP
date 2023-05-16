@@ -40,13 +40,10 @@ void zero_after_neg(const std::vector<int> &vec)
 void mul_pos(const std::vector<int> &vec)
 {
     double d = 1;
-    for (auto &i : vec)
-    {
-        if (i > 0)
-            d *= i;
-        else
-            break;
-    }
+    std::for_each(vec.begin(), std::find_if(vec.begin(), vec.end(), [](int i)
+                                            { return i < 0; }),
+                  [&](int i)
+                  { d *= i; });
     std::cout << d << "\n";
 };
 
