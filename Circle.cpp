@@ -7,7 +7,9 @@ void Circle::move(double z)
 
 void Circle::scale(double z)
 {
+    double temp = get_square();
     radius *= z;
+    sum_square += get_square() - temp;
 }
 
 void Circle::show_attributes()

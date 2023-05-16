@@ -8,8 +8,10 @@ void Par::move(double z)
 
 void Par::scale(double z)
 {
+	double temp = get_square();
 	x.x *= z, x.y *= z, lenght_side *= z;
 	x1.x *= z, x1.y *= z;
+	sum_square += get_square() - temp;
 }
 
 void Par::show_attributes()

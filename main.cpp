@@ -59,10 +59,10 @@ void interface()
             cout << "enter position: ";
             int pos;
             std::cin >> pos;
-            if (pos > 0 && pos < vector_shapes.size())
+            if (pos >= 0 && pos < vector_shapes.size())
             {
                 cout << typeid(vector_shapes[pos]).name() << "\n";
-                vector_shapes[pos]->show_characteristic();
+                vector_shapes[pos]->show_attributes();
             }
             else
                 std::cerr << "invalid index\n";
@@ -77,6 +77,7 @@ void interface()
             {
                 cout << typeid(vector_shapes[pos]).name() << "\n";
                 vector_shapes[pos]->show_attributes();
+                vector_shapes[pos]->show_characteristic();
             }
             else
                 std::cerr << "invalid index\n";
@@ -96,16 +97,16 @@ void interface()
                 if (pos2 >= 0 && pos2 < vector_shapes.size())
                 {
                     if (vector_shapes[pos1] < vector_shapes[pos2])
-                        cout << "area by " << pos2 << " more \n";
+                        cout << "area by: " << pos2 << " more \n";
                     else if (!(vector_shapes[pos1] < vector_shapes[pos2]))
-                        cout << "area by " << pos1 << " more \n";
+                        cout << "area by: " << pos1 << " more \n";
                     else
                         cout << "shapes equal\n";
                 }
                 else
-                    std::cerr << "invalid index by" << pos2 << "\n";
+                    std::cerr << "invalid index by " << pos2 << " \n";
             else
-                std::cerr << "invalid index by" << pos1 << "\n";
+                std::cerr << "invalid index by " << pos1 << " \n";
             break;
         }
         case 7:
